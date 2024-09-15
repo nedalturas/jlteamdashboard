@@ -18,8 +18,8 @@ const database = firebase.database();
 // Function to submit company data
 function submitCompanyData() {
   const companyName = document.getElementById('company-name').value;
-  const cityCoverage = $('#city-coverage').val(); // Using jQuery to get multiple values
-  const services = $('#services').val(); // Using jQuery to get multiple values
+  const cityCoverage = $('#city-coverage').dropdown('get value');
+  const services = $('#services').dropdown('get value');
   const companyType = document.getElementById('company-type').value;
   const whatsappLink = document.getElementById('whatsapp-link').value;
   const adminNotes = document.getElementById('admin-notes').value;
@@ -37,78 +37,23 @@ function submitCompanyData() {
     timestamp: firebase.database.ServerValue.TIMESTAMP
   })
   .then(() => {
-    // console.log('Company data submitted successfully');
-    $.toast({
-      title: 'Success!',
-      message: 'Company added to the database!',
-      showProgress: 'bottom',
-      classProgress: 'green'
-    })
-    ;
-    
-    // Clear all form fields
-    document.getElementById('company-name').value = '';
-    document.getElementById('company-type').value = '';
-    document.getElementById('whatsapp-link').value = '';
-    document.getElementById('admin-notes').value = '';
-    
-    // Reset dropdown selections
-    $('#city-coverage').dropdown('clear');
-    $('#services').dropdown('clear');
-    
-    // Show a success message
+    console.log('Company data submitted successfully');
+    clearForm();
+    alert('Company data submitted successfully');
   })
   .catch((error) => {
     console.error('Error submitting company data:', error);
-    // Show an error message to the user
     alert('Error submitting company data. Please try again.');
   });
 }
-// Function to fetch and populate dropdown options from JSON files
-function populateDropdowns() {
-  // Fetch cities from cities.json
-  fetch('js/cities.json')
-    .then(response => response.json())
-    .then(data => {
-      const citySelect = document.getElementById('city-coverage');
-      if (Array.isArray(data)) {
-        data.forEach(city => {
-          const option = new Option(city.name, city.id);
-          citySelect.add(option);
-        });
-      } else {
-        console.error('Cities data is not an array:', data);
-      }
-      if ($ && $.fn.dropdown) {
-        $(citySelect).dropdown('refresh');
-      }
-    })
-    .catch(error => console.error('Error loading cities:', error));
 
-  // Fetch services from services.json
-  fetch('js/services.json')
-    .then(response => response.json())
-    .then(data => {
-      const serviceSelect = document.getElementById('services');
-      if (Array.isArray(data)) {
-        data.forEach(service => {
-          const option = new Option(service.name, service.id);
-          serviceSelect.add(option);
-        });
-      } else if (typeof data === 'object') {
-        // If data is an object, iterate over its properties
-        Object.entries(data).forEach(([key, value]) => {
-          const option = new Option(value, key);
-          serviceSelect.add(option);
-        });
-      } else {
-        console.error('Services data is not an array or object:', data);
-      }
-      if ($ && $.fn.dropdown) {
-        $(serviceSelect).dropdown('refresh');
-      }
-    })
-    .catch(error => console.error('Error loading services:', error));
+function clearForm() {
+  document.getElementById('company-name').value = '';
+  $('#city-coverage').dropdown('clear');
+  $('#services').dropdown('clear');
+  document.getElementById('company-type').value = '';
+  document.getElementById('whatsapp-link').value = '';
+  document.getElementById('admin-notes').value = '';
 }
 
 // Function to fetch and display companies in the admin table
@@ -121,8 +66,8 @@ function displayCompanies() {
       const row = `
         <tr>
           <td>${company.name}</td>
-          <td>${company.cityCoverage.join(', ')}</td>
-          <td>${company.services.join(', ')}</td>
+          <td>${company.cityCoverage}</td>
+          <td>${formatServices(company.services)}</td>
           <td>
             <button class="ui mini blue icon button" onclick="viewCompany('${childSnapshot.key}')"><i class="eye icon"></i></button>
             <button class="ui mini red icon button" onclick="editCompany('${childSnapshot.key}')"><i class="pencil icon"></i></button>
@@ -132,6 +77,17 @@ function displayCompanies() {
       tableBody.innerHTML += row;
     });
   });
+}
+
+function formatServices(services) {
+  if (!services) return '';
+  if (typeof services === 'string') {
+    return services.split(',').map(s => s.trim()).join(', ');
+  }
+  if (Array.isArray(services)) {
+    return services.join(', ');
+  }
+  return services;
 }
 
 // Function to view company details (placeholder)
@@ -148,11 +104,12 @@ function editCompany(companyId) {
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
-  populateDropdowns();
   displayCompanies();
   
-  document.getElementById('submit-form').addEventListener('click', submitCompanyData);
-
-  // Initialize Semantic UI dropdowns
-  $('.ui.dropdown').dropdown();
+  const submitButton = document.getElementById('submit-form');
+  if (submitButton) {
+    submitButton.addEventListener('click', submitCompanyData);
+  } else {
+    console.error('Submit button not found');
+  }
 });
