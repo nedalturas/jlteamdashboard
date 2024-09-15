@@ -1,8 +1,34 @@
-{
-    "dubai": "Dubai",
-    "abu_dhabi": "Abu Dhabi",
-    "sharjah": "Sharjah",
-    "ajman": "Ajman",
-    "al_ain": "Al Ain"
-}
-  
+[
+    {
+      "value": "dubai",
+      "name": "Dubai"
+    },
+    {
+      "value": "abu-dhabi",
+      "name": "Abu Dhabi"
+    },
+    {
+      "value": "sharjah",
+      "name": "Sharjah"
+    },
+    {
+      "value": "ajman",
+      "name": "Ajman"
+    },
+    {
+      "value": "ras-al-khaimah",
+      "name": "Ras Al Khaimah"
+    },
+    {
+      "value": "fujairah",
+      "name": "Fujairah"
+    },
+    {
+      "value": "umm-al-quwain",
+      "name": "Umm Al Quwain"
+    },
+    {
+      "value": "al-ain",
+      "name": "Al Ain"
+    }
+  ]

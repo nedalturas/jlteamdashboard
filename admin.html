@@ -28,6 +28,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js"></script>
     <script src="js/app.js" defer></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="js/firebase.js"></script>
 
     <meta name="theme-color" content="#fafafa" />
   </head>
@@ -52,7 +57,7 @@
         <!-- Sidebar Menu -->
         <div class="four wide column">
           <div class="ui vertical fluid tabular menu">
-            <a class="item" data-tab="company-form">Company Form</a>
+            <a class="item active" data-tab="company-form">Company Form</a>
             <a class="item" data-tab="admin-table">Admin Table</a>
             <a class="item" data-tab="dashboard">Dashboard</a>
           </div>
@@ -61,12 +66,12 @@
         <!-- Main Content -->
         <div class="twelve wide stretched column">
           <!-- Home Tab -->
-          <div class="ui tab" data-tab="company-form">
-            <div class="ui form">
+          <div class="ui tab active" data-tab="company-form">
+            <div class="ui form" id="company-form">
               <h1 class="ui header">Company Information</h1>
               <div class="field">
                 <label>Company Name</label>
-                <input type="text" placeholder="Company Name" />
+                <input type="text" id="company-name" placeholder="Company Name" />
               </div>
 
               <div class="field selection dropdown">
@@ -99,31 +104,79 @@
               <div class="field selection dropdown">
                 <div class="field selection dropdown">
                   <label>Company Type</label>
-                  <select class="ui fluid dropdown">
+                  <select id="company-type" class="ui fluid dropdown">
                     <option value="">Company Type</option>
                     <option value="exclusive">Exclusive</option>
                     <option value="marketplace">Marketplace</option>
-
-                    <!-- Options will be populated here -->
                   </select>
                 </div>
               </div>
 
               <div class="field">
                 <label>WhatsApp Link</label>
-                <input type="text" placeholder="WhatsApp Link" />
+                <input type="text" id="whatsapp-link" placeholder="WhatsApp Link" />
               </div>
               <div class="field">
                 <label>Admin Notes</label>
-                <textarea></textarea>
+                <textarea id="admin-notes"></textarea>
               </div>
-              <button class="ui button blue">Submit</button>
+              <button class="ui button blue" id="submit-form">Submit</button>
             </div>
           </div>
 
           <!-- Messages Tab -->
           <div class="ui tab" data-tab="admin-table">
-            <p>Admin Table content goes here.</p>
+            <h1 class="ui header">Admin Control</h1>
+
+            <div class="ui container">
+              <div class="ui grid">
+                <div class="sixteen wide column">
+                  <div class="ui form">
+                    <div class="three fields">
+                      <div class="field">
+                        <div class="ui icon input">
+                          <input type="text" placeholder="Search...">
+                          <i class="search icon"></i>
+                        </div>
+                      </div>
+                      <div class="field">
+                        <select class="ui dropdown" id="city-filter">
+                          <option value="">All Cities</option>
+                          <!-- Options will be populated dynamically -->
+                        </select>
+                      </div>
+                      <div class="field">
+                        <select class="ui dropdown" id="service-filter">
+                          <option value="">All Services</option>
+                          <!-- Options will be populated dynamically -->
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="sixteen wide column">
+                  <table class="ui selectable  table">
+                    <thead>
+                      <tr>
+                        <th>Company Name</th>
+                        <th>City Coverage</th>
+                        <th>Service Type</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <td>TPH</td>
+                      <td>Dubai</td>
+                      <td>Home Cleaning</td>
+                      <td>
+                        <button class="ui mini blue icon button"><i class="eye icon"></i></button>
+                        <button class="ui mini red icon button"><i class="pencil icon"></i></button>
+                      </td>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Friends Tab -->
@@ -135,7 +188,9 @@
     </div>
 
     <script>
-      // Initialize dropdowns and tabs
+      // Initialize Firebase
+      
     </script>
-  </body>
+
+  </body> 
 </html>

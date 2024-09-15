@@ -1,48 +1,39 @@
-window.onload = function () {
-    fetch('js/cities.json')
-      .then((response) => response.json())
-      .then((data) => {
-        populateCities(data);
-        initializeDropdown();
-      })
-      .catch((error) => console.error('Error fetching city data:', error));
-  
-    function populateCities(cities) {
-      const dropdown = document.getElementById('city-coverage');
-      for (const key in cities) {
-        const option = document.createElement('option');
-        option.value = key;
-        option.textContent = cities[key];
-        dropdown.appendChild(option);
-      }
-    }
-  
-    fetch('js/services.json')
-      .then((response) => response.json())
-      .then((data) => {
-        populateServices(data);
-      })
-      .catch((error) => console.error('Error fetching services data:', error));
-  
-    function populateServices(services) {
-      const dropdown = document.getElementById('services');
-      for (const key in services) {
-        const option = document.createElement('option');
-        option.value = key;
-        option.textContent = services[key];
-        dropdown.appendChild(option);
-      }
-    }
-  
-    function initializeDropdown() {
-      // Initialize Semantic UI dropdown with multiple selection
-      $('.ui.dropdown').dropdown({
-        allowAdditions: true,
-        on: 'hover',
-      });
-    }
-  
-    // Initialize tabs
-    $('.menu .item').tab();
-};
-  
+document.addEventListener('DOMContentLoaded', () => {
+  fetchCitiesAndServices();
+});
+
+async function fetchCitiesAndServices() {
+  try {
+    // Fetch cities and services data
+    const [citiesResponse, servicesResponse] = await Promise.all([
+      fetch('js/cities.json'),
+      fetch('js/services.json')
+    ]);
+
+    const cities = await citiesResponse.json();
+    const services = await servicesResponse.json();
+
+    // Populate the city coverage dropdown
+    const cityDropdown = document.getElementById('city-coverage');
+    cities.forEach(city => {
+      const option = document.createElement('option');
+      option.value = city.value;
+      option.textContent = city.name;
+      cityDropdown.appendChild(option);
+    });
+
+    // Populate the services dropdown
+    const serviceDropdown = document.getElementById('services');
+    Object.keys(services).forEach(key => {
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = services[key];
+      serviceDropdown.appendChild(option);
+    });
+
+    // Initialize Semantic UI dropdowns
+    $('.ui.dropdown').dropdown();
+  } catch (error) {
+    console.error('Error fetching cities or services:', error);
+  }
+}
