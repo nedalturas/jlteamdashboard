@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Justlife</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <meta name="description" content="" />
+
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <meta property="og:image:alt" content="" />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon.png" />
+    <!-- Semantic css -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css"
+    />
+
+    <link rel="manifest" href="site.webmanifest" />
+    <!-- Semantic js -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js"></script>
+    <script src="js/app.js" defer></script>
+
+    <meta name="theme-color" content="#fafafa" />
+  </head>
+
+  <body>
+    <nav class="ui secondary attached menu">
+      <div class="ui container">
+        <!-- Right brand -->
+        <div class="left menu">
+          <div class="item" id="logo">
+            <h3>Justlife Team</h3>
+          </div>
+        </div>
+        <!-- Left links -->
+        <a href="index.html" class="item">Teams</a>
+        <a href="admin.html" class="item">Admin</a>
+      </div>
+    </nav>
+
+    <div class="ui container">
+      <div class="ui grid" id="admin-tab">
+        <!-- Sidebar Menu -->
+        <div class="four wide column">
+          <div class="ui vertical fluid tabular menu">
+            <a class="item" data-tab="company-form">Company Form</a>
+            <a class="item" data-tab="admin-table">Admin Table</a>
+            <a class="item" data-tab="dashboard">Dashboard</a>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="twelve wide stretched column">
+          <!-- Home Tab -->
+          <div class="ui tab" data-tab="company-form">
+            <div class="ui form">
+              <h1 class="ui header">Company Information</h1>
+              <div class="field">
+                <label>Company Name</label>
+                <input type="text" placeholder="Company Name" />
+              </div>
+
+              <div class="field selection dropdown">
+                <div class="field selection dropdown">
+                  <label>City Coverage</label>
+                  <select
+                    id="city-coverage"
+                    class="ui fluid dropdown search"
+                    multiple="multiple"
+                  >
+                    <option value="">Select Cities</option>
+                    <!-- Options will be populated here -->
+                  </select>
+                </div>
+              </div>
+              <div class="field selection dropdown">
+                <div class="field selection dropdown">
+                  <label>Services</label>
+                  <select
+                    id="services"
+                    class="ui fluid dropdown search"
+                    multiple="multiple"
+                  >
+                    <option value="">Select Service</option>
+                    <!-- Options will be populated here -->
+                  </select>
+                </div>
+              </div>
+
+              <div class="field selection dropdown">
+                <div class="field selection dropdown">
+                  <label>Company Type</label>
+                  <select class="ui fluid dropdown">
+                    <option value="">Company Type</option>
+                    <option value="exclusive">Exclusive</option>
+                    <option value="marketplace">Marketplace</option>
+
+                    <!-- Options will be populated here -->
+                  </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>WhatsApp Link</label>
+                <input type="text" placeholder="WhatsApp Link" />
+              </div>
+              <div class="field">
+                <label>Admin Notes</label>
+                <textarea></textarea>
+              </div>
+              <button class="ui button blue">Submit</button>
+            </div>
+          </div>
+
+          <!-- Messages Tab -->
+          <div class="ui tab" data-tab="admin-table">
+            <p>Admin Table content goes here.</p>
+          </div>
+
+          <!-- Friends Tab -->
+          <div class="ui tab" data-tab="dashboard">
+            <p>Dashboard content goes here.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Initialize dropdowns and tabs
+    </script>
+  </body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Justlife Team</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <meta name="description" content="" />
+
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <meta property="og:image:alt" content="" />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon.png" />
+    <!-- Semantic css -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css"
+    />
+
+    <link rel="manifest" href="site.webmanifest" />
+    <!-- Semantic js -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js"></script>
+    <script src="js/app.js" defer></script>
+
+
+    <meta name="theme-color" content="#fafafa" />
+  </head>
+
+  <body>
+    <nav class="ui secondary attached menu">
+      <div class="ui container">
+        
+        <!-- Right brand -->
+        <div class="left menu">
+          <div class="item" id="logo">
+            <h3>Justlife Team</h3>
+          </div>
+        </div>
+      <!-- Left links -->
+
+        <a href="index.html" class="item">Teams</a>
+        <a href="admin.html" class="item">Admin</a>
+      </div>
+        
+   </nav>
+
+    <div class="ui container">
+      
+      <div class="filters">
+        <div class="ui input">
+            <input type="text" placeholder="Filter by company name...">
+        </div>
+        <div class="ui selection dropdown">
+          <input type="hidden" name="city">
+          <div class="default text">All Cities</div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+              <div class="item" data-value="all">All Cities</div>
+              <div class="item" data-value="dubai">Dubai</div>
+              <div class="item" data-value="sharjah">Sharjah</div>
+              <div class="item" data-value="ajman">Ajman</div>
+              <div class="item" data-value="abudhabi">Abu Dhabi</div>
+              <div class="item" data-value="alain">Al Ain</div>
+          </div>
+        </div>
+        <div class="ui selection dropdown">
+            <input type="hidden" name="service">
+            <div class="default text">All Services</div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+                <div class="item" data-value="all">All Services</div>
+                <div class="item" data-value="home">Home Cleaning</div>
+                <div class="item" data-value="deep">Deep Cleaning</div>
+            </div>
+        </div>
+      </div>
+
+      <table class="ui striped selectable table">
+        <thead>
+            <tr>
+                <th>Company Name</th>
+                <th>City Coverage</th>
+                <th>Type</th>
+                <th>Services</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>JL Company</td>
+                <td>dubai</td>
+                <td>Marketplace</td>
+                <td>Home Cleaning</td>
+                <td class="actions">
+                    <button class="ui mini blue icon button"><i class="eye icon"></i></button>
+                </td>
+            </tr>
+            
+        </tbody>
+      </table>
+    </div>
+  </div>
+    <script>
+      $(document).ready(function () {
+        $('.ui.dropdown').dropdown();
+      });
+    </script>
+  </body>
+</html>
