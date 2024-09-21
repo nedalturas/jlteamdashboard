@@ -1,154 +1,170 @@
-let servicesMap = {};
+const firebaseConfig = {
+    apiKey: "AIzaSyBgmTKtgqKGKvR7tbjeq8V1LEAMmfQ76Uk",
+    authDomain: "jlteamv2.firebaseapp.com",
+    databaseURL: "https://jlteamv2-default-rtdb.firebaseio.com",
+    projectId: "jlteamv2",
+    storageBucket: "jlteamv2.appspot.com",
+    messagingSenderId: "588273591772",
+    appId: "1:588273591772:web:4848f7d80f68171a095b19"
+};
 
-// Function to fetch and display companies in the admin table
-function displayCompanies(filter = '', cityFilter = '', serviceFilter = '') {
-  const tableBody = document.querySelector('.ui.table tbody');
-  database.ref('companies').once('value', (snapshot) => {
-    tableBody.innerHTML = ''; // Clear existing rows
-    snapshot.forEach((childSnapshot) => {
-      const company = childSnapshot.val();
-      const cityMatch = cityFilter === '' || (Array.isArray(company.cityCoverage) && company.cityCoverage.includes(cityFilter)) || company.cityCoverage === cityFilter;
-      const serviceMatch = serviceFilter === '' || (company.services && (
-        (typeof company.services === 'string' && company.services.split(',').map(s => s.trim()).includes(serviceFilter)) ||
-        (Array.isArray(company.services) && company.services.includes(serviceFilter))
-      ));
-      const nameMatch = company.name.toLowerCase().includes(filter.toLowerCase());
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
 
-      if (cityMatch && serviceMatch && nameMatch) {
-        const row = `
-          <tr>
-            <td>${company.name}</td>
-            <td>${Array.isArray(company.cityCoverage) ? company.cityCoverage.join(', ') : company.cityCoverage}</td>
-            <td>${formatServices(company.services)}</td>
-            <td>
-              <button class="ui mini blue icon button" onclick="viewCompany('${childSnapshot.key}')"><i class="eye icon"></i></button>
-              <button class="ui mini red icon button" onclick="editCompany('${childSnapshot.key}')"><i class="pencil icon"></i></button>
-            </td>
-          </tr>
-        `;
-        tableBody.innerHTML += row;
-      }
+// Function to fetch cities and services from JSON files
+async function fetchOptions() {
+    const citiesResponse = await fetch('js/cities.json');
+    const servicesResponse = await fetch('js/services.json');
+    const cities = await citiesResponse.json();
+    const services = await servicesResponse.json();
+    return { cities, services };
+}
+
+// Function to fetch cities and services from Firebase
+async function fetchCitiesAndServicesFromDB() {
+    const citiesSnapshot = await database.ref('cities').once('value');
+    const servicesSnapshot = await database.ref('services').once('value');
+
+    const cities = [];
+    const services = [];
+
+    citiesSnapshot.forEach(city => {
+        cities.push({ value: city.key, name: city.val().name });
     });
-  });
-}
 
-function formatServices(services) {
-  if (!services) return '';
-  if (typeof services === 'string') {
-    return services.split(',').map(s => servicesMap[s.trim()] || s.trim()).join(', ');
-  }
-  if (Array.isArray(services)) {
-    return services.map(s => servicesMap[s] || s).join(', ');
-  }
-  return services;
-}
-
-// Function to view company details (placeholder)
-function viewCompany(companyId) {
-  console.log('Viewing company:', companyId);
-  // Implement view functionality
-}
-
-// Function to edit company details (placeholder)
-function editCompany(companyId) {
-  console.log('Editing company:', companyId);
-  // Implement edit functionality
-}
-
-// Function to populate dropdowns from the database
-function populateDropdowns() {
-  const citySelect = document.getElementById('city-filter');
-  const serviceSelect = document.getElementById('service-filter');
-
-  // Populate cities
-  database.ref('companies').once('value', (snapshot) => {
-    const cities = new Set();
-    snapshot.forEach((childSnapshot) => {
-      const company = childSnapshot.val();
-      if (company.cityCoverage) {
-        // If cityCoverage is an array, add all cities
-        if (Array.isArray(company.cityCoverage)) {
-          company.cityCoverage.forEach(city => cities.add(city));
-        } else {
-          cities.add(company.cityCoverage);
-        }
-      }
+    servicesSnapshot.forEach(service => {
+        services.push({ value: service.key, name: service.val().name });
     });
-    citySelect.innerHTML = '<option value="">All Cities</option>';
-    Array.from(cities).sort().forEach((city) => {
-      const option = new Option(city, city);
-      citySelect.add(option);
+
+    return { cities, services };
+}
+
+// Function to populate dropdowns
+async function populateDropdowns() {
+    const { cities: jsonCities, services: jsonServices } = await fetchOptions();
+    const { cities: dbCities, services: dbServices } = await fetchCitiesAndServicesFromDB();
+
+    const cityDropdown = document.getElementById('city-coverage');
+    const serviceDropdown = document.getElementById('services');
+    const cityFilterDropdown = document.getElementById('city-filter');
+    const serviceFilterDropdown = document.getElementById('service-filter');
+
+    // Populate city dropdown from JSON
+    jsonCities.forEach(city => {
+        const option = document.createElement('option');
+        option.value = city.value;
+        option.textContent = city.name;
+        cityDropdown.appendChild(option);
+        cityFilterDropdown.appendChild(option.cloneNode(true)); // Clone the option for the filter dropdown
     });
-    if ($ && $.fn.dropdown) {
-      $(citySelect).dropdown('refresh');
+
+    // Populate service dropdown from JSON
+    Object.keys(jsonServices).forEach(service => {
+        const option = document.createElement('option');
+        option.value = service;
+        option.textContent = jsonServices[service];
+        serviceDropdown.appendChild(option);
+        serviceFilterDropdown.appendChild(option.cloneNode(true)); // Clone the option for the filter dropdown
+    });
+
+    // Populate city dropdown from Firebase
+    dbCities.forEach(city => {
+        const option = document.createElement('option');
+        option.value = city.value;
+        option.textContent = city.name;
+        cityDropdown.appendChild(option);
+        cityFilterDropdown.appendChild(option.cloneNode(true)); // Clone the option for the filter dropdown
+    });
+
+    // Populate service dropdown from Firebase
+    dbServices.forEach(service => {
+        const option = document.createElement('option');
+        option.value = service.value;
+        option.textContent = service.name;
+        serviceDropdown.appendChild(option);
+        serviceFilterDropdown.appendChild(option.cloneNode(true)); // Clone the option for the filter dropdown
+    });
+}
+
+// Function to initialize Fomantic UI elements
+function initializeFomanticUI() {
+    // Initialize dropdowns
+    $('.ui.dropdown').dropdown();
+}
+
+// Function to handle form submission
+async function registerData(event) {
+    event.preventDefault();
+
+    // Get form values
+    const companyName = $('#company-name').val();
+    const selectedCities = $('#city-coverage').dropdown('get value');
+    const selectedServices = $('#services').dropdown('get value');
+    const companyType = $('#company-type').dropdown('get value');
+    const whatsappLink = $('#whatsapp-link').val();
+    const adminNotes = $('#admin-notes').val();
+
+    // Validation checks
+    if (!companyName || selectedCities.length === 0 || selectedServices.length === 0 || !companyType) {
+        $('.ui.error.message').text('Please fill in all required fields: Company Name, City Coverage, Services, and Company Type.').show();
+        return; // Prevent submission
     }
-  });
 
-  database.ref('companies').once('value', (snapshot) => {
-    const services = new Set();
-    snapshot.forEach((childSnapshot) => {
-      const company = childSnapshot.val();
-      if (company.services) {
-        // If services is an array, add all services
-        if (Array.isArray(company.services)) {
-          company.services.forEach(service => services.add(service));
-        } else {
-          services.add(company.services);
-        }
-      }
-    });
-    serviceSelect.innerHTML = '<option value="">All Services</option>';
-    Array.from(services).sort().forEach((service) => {
-      const option = new Option(service, service);
-      serviceSelect.add(option);
-    });
-    if ($ && $.fn.dropdown) {
-      $(serviceSelect).dropdown('refresh');
+    const companyData = {
+        companyName,
+        cityCoverage: selectedCities,
+        services: selectedServices,
+        companyType,
+        whatsappLink,
+        adminNotes
+    };
+
+    // Save to database
+    try {
+        await saveCompanyData(companyData);
+        
+        // Show success message
+        $('.ui.success.message').text('Company data registered successfully!').show();
+        
+        // Reset the form
+        $('#company-form').form('clear');
+        
+        // Clear Fomantic UI dropdowns
+        $('#city-coverage').dropdown('clear');
+        $('#services').dropdown('clear');
+        $('#company-type').dropdown('clear');
+        
+        // Hide messages after a delay
+        setTimeout(() => {
+            $('.ui.message').hide();
+        }, 3000);
+    } catch (error) {
+        console.error('Error saving company data:', error);
+        $('.ui.error.message').text('An error occurred while saving the data. Please try again.').show();
     }
-  });
-
-
-  // Fetch services from services.json
-  fetch('js/services.json')
-    .then(response => response.json())
-    .then(data => {
-      servicesMap = data;
-      serviceSelect.innerHTML = '<option value="">All Services</option>';
-      Object.entries(data).forEach(([key, value]) => {
-        const option = new Option(value, key);
-        serviceSelect.add(option);
-      });
-      if ($ && $.fn.dropdown) {
-        $(serviceSelect).dropdown('refresh');
-      }
-    })
-    .catch(error => console.error('Error loading services:', error));
 }
 
-// Event listener to initialize admin functionalities
-document.addEventListener('DOMContentLoaded', () => {
-  populateDropdowns();
-  displayCompanies(); // Initially display all companies
-
-  // Add event listener for search input
-  const searchInput = document.querySelector('.ui.input input');
-  searchInput.addEventListener('input', () => {
-    applyFilters();
-  });
-
-  // Add event listeners for dropdown filters
-  const cityFilter = document.getElementById('city-filter');
-  const serviceFilter = document.getElementById('service-filter');
-
-  cityFilter.addEventListener('change', applyFilters);
-  serviceFilter.addEventListener('change', applyFilters);
+// Initialize Fomantic UI form validation
+$('#company-form').form({
+    fields: {
+        'company-name': 'empty', // Match the ID of the input field
+        'city-coverage': 'empty', // Match the ID of the select field
+        'services': 'empty', // Match the ID of the select field
+        'company-type': 'empty' // Match the ID of the select field
+    }
 });
 
-// Function to apply filters
-function applyFilters() {
-  const cityFilter = document.getElementById('city-filter').value;
-  const serviceFilter = document.getElementById('service-filter').value;
-  const searchInput = document.querySelector('.ui.input input').value;
-
-  displayCompanies(searchInput, cityFilter, serviceFilter);
+// Function to save company data
+function saveCompanyData(companyData) {
+    return database.ref('companies').push(companyData);
 }
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', async () => {
+    await populateDropdowns();
+    initializeFomanticUI(); // Call the initialization function
+
+    document.getElementById('submit-form').addEventListener('click', registerData);
+});
+
