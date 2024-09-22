@@ -27,10 +27,13 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js"></script>
+    <script src="js/admin.js" defer></script>
+    <script src="js/app.js" defer></script>
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="js/firebase.js"></script>
 
     <meta name="theme-color" content="#fafafa" />
   </head>
@@ -66,39 +69,52 @@
           <!-- Home Tab -->
           <div class="ui tab active" data-tab="company-form">
             <div class="ui form" id="company-form">
-
-              <div class="ui error message"></div>
-              <div class="ui success message">Success?</div>
-              
               <h1 class="ui header">Company Information</h1>
-              
               <div class="field">
-                <label>Company Name</label>
-                <input type="text" id="company-name" placeholder="Company Name" />
-              </div>
-
-              <div class="field">
-                <label>City Coverage</label>
-                <select id="city-coverage" class="ui fluid search dropdown" multiple="">
-                  <option value="">Select Cities</option>
-                </select>
-              </div>
-              <div class="field">
-                <label>Services</label>
-                <select id="services" class="ui fluid search dropdown" multiple="">
-                  <option value="">Select Services</option>
-                </select>
+                <label for="company-name">Company Name</label>
+                <input type="text" id="company-name" placeholder="Company Name" required />
               </div>
 
               <div class="field selection dropdown">
-                <div class="field selection dropdown">
+                <label>City Coverage</label>
+                <select
+                  id="city-coverage"
+                  class="ui fluid dropdown search"
+                  multiple="multiple"
+                >
+                  <option value="">Select Cities</option>
+                  <!-- Options will be populated here -->
+                </select>
+              </div>
+              <div class="field selection dropdown">
+                <label>Services</label>
+                <select
+                  id="services"
+                  class="ui fluid dropdown search"
+                  multiple="multiple"
+                >
+                  <option value="">Select Service</option>
+                  <!-- Options will be populated here -->
+                </select>
+              </div>
+              
+
+              <div class="field selection dropdown">
                   <label>Company Type</label>
-                  <select id="company-type" class="ui fluid dropdown">
-                    <option value="">Company Type</option>
-                    <option value="exclusive">Exclusive</option>
-                    <option value="marketplace">Marketplace</option>
+                  <select id="company-type" class="ui selection dropdown">
+                    <option value="">Select</option>
+                    <option value="Exclusive">Exclusive</option>
+                    <option value="Marketplace">Marketplace</option>
                   </select>
-                </div>
+              </div>
+
+              <div class="field selection dropdown">
+                <label>Company Status</label>
+                <select id="company-status" class="ui selection dropdown">
+                  <option value="">Select</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
               </div>
 
               <div class="field">
@@ -130,7 +146,7 @@
                       </div>
                       <div class="field">
 
-                        <select id="city-filter" class="ui fluid search dropdown " multiple="">
+                        <select id="city-filter" class="ui dropdown">
                           <option value="">All Cities</option>
                         </select>
                       </div>
@@ -149,17 +165,12 @@
                         <th>Company Name</th>
                         <th>City Coverage</th>
                         <th>Service Type</th>
+                        <th>Company Status</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <td>TPH</td>
-                      <td>Dubai</td>
-                      <td>Home Cleaning</td>
-                      <td>
-                        <button class="ui mini blue icon button"><i class="eye icon"></i></button>
-                        <button class="ui mini red icon button"><i class="pencil icon"></i></button>
-                      </td>
+                      <!-- Auto populate from DB -->
                     </tbody>
                   </table>
                 </div>
@@ -175,7 +186,10 @@
       </div>
     </div>
 
-       <script src="js/admin.js" defer></script>
+    <script>
+      // Initialize Firebase
+      
+    </script>
 
    
   </body> 

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Justlife</title>
+    <title>Justlife Team</title>
     <link rel="stylesheet" href="css/style.css" />
     <meta name="description" content="" />
 
@@ -27,10 +27,15 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js"></script>
-    
-    <!-- Firebase SDK -->
+    <script src="js/app.js" defer></script>
+    <script src="js/teams.js" defer></script>
+
+
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="js/firebase.js"></script>
+
+
 
     <meta name="theme-color" content="#fafafa" />
   </head>
@@ -54,31 +59,39 @@
    </nav>
 
     <div class="ui container">
-      
+
       <div class="filters">
-        <div class="ui input">
-            <input type="text" placeholder="Search by company name...">
+
+        <div class="ui form">
+          <div class="three fields">
+            <div class="field">
+              <div class="ui icon input">
+                <input type="text" placeholder="Search...">
+                <i class="search icon"></i>
+              </div>
+            </div>
+            <div class="field">
+
+              <select id="city-filter" class="ui dropdown">
+                <option value="">All Cities</option>
+              </select>
+            </div>
+            <div class="field">
+              <select class="ui dropdown" id="service-filter">
+                <option value="">All Services</option>
+              </select>
+            </div>
+          </div>
         </div>
-        <div class="ui selection dropdown" id="city-filter">
-            <input type="hidden" name="city">
-            <div class="default text">All Cities</div>
-            <i class="dropdown icon"></i>
-            <div class="menu"></div>
-        </div>
-        <div class="ui selection dropdown" id="service-filter">
-            <input type="hidden" name="service">
-            <div class="default text">All Services</div>
-            <i class="dropdown icon"></i>
-            <div class="menu"></div>
-        </div>
-      </div>
+
+       
 
       <table class="ui striped selectable table">
         <thead>
             <tr>
                 <th>Company Name</th>
                 <th>City Coverage</th>
-                <th>Type</th>
+                <th>Status</th>
                 <th>Services</th>
                 <th>Actions</th>
             </tr>
@@ -98,7 +111,10 @@
       </table>
     </div>
   </div>
-   
-  <script src="js/admin.js" ></script>
+    <script>
+      $(document).ready(function () {
+        $('.ui.dropdown').dropdown();
+      });
+    </script>
   </body>
 </html>
