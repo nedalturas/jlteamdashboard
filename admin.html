@@ -28,12 +28,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js"></script>
     <script src="js/admin.js" defer></script>
-    <script src="js/app.js" defer></script>
+    <script src="js/index.js" defer></script>
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="js/firebase.js"></script>
 
     <meta name="theme-color" content="#fafafa" />
   </head>
@@ -70,12 +69,17 @@
           <div class="ui tab active" data-tab="company-form">
             <div class="ui form" id="company-form">
               <h1 class="ui header">Company Information</h1>
+
+              <div class="ui error message"></div>
+              <div class="ui success message"></div>
+              
               <div class="field">
                 <label for="company-name">Company Name</label>
                 <input type="text" id="company-name" placeholder="Company Name" required />
               </div>
 
               <div class="field selection dropdown">
+                
                 <label>City Coverage</label>
                 <select
                   id="city-coverage"
@@ -98,7 +102,7 @@
                 </select>
               </div>
               
-
+              
               <div class="field selection dropdown">
                   <label>Company Type</label>
                   <select id="company-type" class="ui selection dropdown">
@@ -126,6 +130,7 @@
                 <textarea id="admin-notes"></textarea>
               </div>
               <button class="ui button blue" id="submit-form">Submit</button>
+             
             </div>
           </div>
 
